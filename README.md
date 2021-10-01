@@ -1,5 +1,9 @@
 # Deep Grasp Demo
+# Made a couple changes such that this actually builds -J
+
 <img src="https://picknik.ai/assets/images/logo.jpg" width="120">
+
+
 
 1) [Overview](#Overview) </br>
 2) [Packages](#Packages) </br>
@@ -30,7 +34,7 @@ for the grasp generation stage within the MoveIt Task Constructor
 
 ## Getting Started
 First, Complete the [Getting Started Tutorial](https://ros-planning.github.io/moveit_tutorials/doc/getting_started/getting_started.html).
-
+Make sure you follow the melodic portion of the tutorials
 Before installing the dependencies it is recommended to run:
 ```
 sudo apt update
@@ -40,7 +44,7 @@ sudo apt upgrade
 **Important Note**: It is recommended to install dependencies that are not ROS packages outside of the
 catkin workspace. For GPD this includes PCL, OpenCV, and the GPD library. For Dex-Net this includes [gqcnn](https://github.com/BerkeleyAutomation/gqcnn), [autolab_core](https://github.com/BerkeleyAutomation/autolab_core), [perception](https://github.com/BerkeleyAutomation/perception), and [visualization](https://github.com/BerkeleyAutomation/visualization). The steps bellow will walk you through the installation.
 
-
+## Only install dexnet for now, since we'd like to use a depth image
 ## Install Grasp Pose Detection
 1) Requirements
   * PCL >= 1.9: The `pcl_install.sh` script will install PCL 1.11
@@ -118,6 +122,7 @@ In `moveit_task_constructor_gpd/config/gpd_congfig.yaml` navigate to line 33 and
   ```
 
 4) Configuration File Paths
+## simply replace bostoncreek with your linux username, in the absolute paths
 
 In `moveit_task_constructor_gpd/config/dexnet_config.yaml` specify the absolute file paths to the `model_dir` and `model_params` parameters for the Dex-Net 4.0 parallel jaw configuration. The `model_name` is already set to use the Dex-Net 4.0 parallel jaw configuration. The `model_dir` parameter specifies the path to the learned model weights located in `gqcnn/cfg/examples/replication/dex-net_4.0_pj.yaml` and the `model_params` parameter specifies the model configuration located in `gqcnn/models`. If you use the `dexnet_install.sh` script the `gqcnn` directory will be located inside the `dexnet_deps` directory.
 
