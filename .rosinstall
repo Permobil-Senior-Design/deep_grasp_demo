@@ -4,8 +4,8 @@
     version: master
 - git:
     local-name: moveit_task_constructor
-    uri: https://github.com/bostoncleek/moveit_task_constructor.git
-    version: pr-deep_grasp_stage
+    uri: https://github.com/Avdbergnmf/moveit_task_constructor.git
+    version: master
 # - git:
 #     local-name: panda_moveit_config
 #     uri: https://github.com/tahsinkose/panda_moveit_config.git
