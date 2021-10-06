@@ -45,60 +45,6 @@ sudo apt upgrade
 catkin workspace. For GPD this includes PCL, OpenCV, and the GPD library. For Dex-Net this includes [gqcnn](https://github.com/BerkeleyAutomation/gqcnn), [autolab_core](https://github.com/BerkeleyAutomation/autolab_core), [perception](https://github.com/BerkeleyAutomation/perception), and [visualization](https://github.com/BerkeleyAutomation/visualization). The steps bellow will walk you through the installation.
 
 ## Only install dexnet for now, since we'd like to use a depth image
-## Install Grasp Pose Detection
-1) Requirements
-  * PCL >= 1.9: The `pcl_install.sh` script will install PCL 1.11
-  ```
-  wget https://raw.githubusercontent.com/PickNikRobotics/deep_grasp_demo/master/pcl_install.sh
-  chmod +x pcl_install.sh
-  sudo ./pcl_install.sh
-  ```
-
-  * OpenCV >= 3.4: The `opencv_install.sh` script will install OpenCV 3.4
-  ```
-  wget https://raw.githubusercontent.com/PickNikRobotics/deep_grasp_demo/master/opencv_install.sh
-  chmod +x opencv_install.sh
-  sudo ./opencv_install.sh
-  ```
-
-  * Eigen >= 3.0: If ROS is installed then this requirement is satisfied
-
-2) Clone th GPD library
-  ```
-  git clone https://github.com/atenpas/gpd
-  ```
-
-3) Modify CMakeLists.txt
-
-  First, remove the `-03` compiler optimization. This optimization can cause
-  a segmentation fault on 18.04.
-
-  ```
-  set(CMAKE_CXX_FLAGS "-fopenmp -fPIC -Wno-deprecated -Wenum-compare -Wno-ignored-attributes -std=c++14")
-  ```
-
-  Next, update the `find_package()` functions for the `PCL` and `OpenCV`
-  versions installed. If you ran the above install scripts `CMakeLists.txt` should read:
-
-  ```
-  find_package(PCL 1.11 REQUIRED)
-  find_package(OpenCV 3.4 REQUIRED)
-  ```
-
-4) Build
-```
-cd gpd
-mkdir build && cd build
-cmake ..
-make -j
-sudo make install
-```
-
-5) Configuration File Path
-
-In `moveit_task_constructor_gpd/config/gpd_congfig.yaml` navigate to line 33 and update `weights_file` to contain the absolute file path to the location of the [lenet params](https://github.com/atenpas/gpd/tree/master/models/lenet/15channels/params) directory. This directory contains the learned model weights and is located where the GPD repository was cloned.
-
-
 ## Install Dex-Net
 1) It is recommended to upgrade pip and to create a virtual environment
    prior to running the install script in the next step.
@@ -134,7 +80,7 @@ For now it is recommended to create a new workspace to prevent conflicts between
 mkdir -p ~/ws_grasp/src
 cd ~/ws_grasp/src
 wstool init
-wstool merge https://raw.githubusercontent.com/PickNikRobotics/deep_grasp_demo/master/.rosinstall
+wstool merge https://raw.githubusercontent.com/jeoseo/deep_grasp_demo/master/.rosinstall
 wstool update
 
 rosdep install --from-paths . --ignore-src --rosdistro $ROS_DISTRO
