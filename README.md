@@ -48,6 +48,13 @@ catkin workspace. For GPD this includes PCL, OpenCV, and the GPD library. For De
 ## Install Dex-Net
 1) It is recommended to upgrade pip and to create a virtual environment
    prior to running the install script in the next step.
+   
+   Make the venv environment inside your catkin workspace (same level as src, build, devel)
+   ```
+   python3 -m venv tutorial-env
+   source tutorial-env/bin/activate
+   ```
+   
    ```
    python3 -m pip install --upgrade pip
    ```
@@ -56,43 +63,27 @@ catkin workspace. For GPD this includes PCL, OpenCV, and the GPD library. For De
   If you have a GPU this option will install tensorflow with GPU support. This script
   will install packages for Python 3.
   ```
-  wget https://raw.githubusercontent.com/PickNikRobotics/deep_grasp_demo/master/dexnet_install.sh
-  wget https://raw.githubusercontent.com/PickNikRobotics/deep_grasp_demo/master/dexnet_requirements.txt
+  wget https://raw.githubusercontent.com/jeoseo/deep_grasp_demo/master/dexnet_install.sh
+  wget https://raw.githubusercontent.com/jeoseo/deep_grasp_demo/master/dexnet_requirements.txt
   chmod +x dexnet_install.sh
   ./dexnet_install.sh {cpu|gpu}
   ```
+  
+  Most likely, you will just be using the cpu, so remove the brackets and |gpu from the last command.
 
 3) Download the pretrained models
+
   ```
-  ./dexnet_deps/gqcnn/scripts/downloads/models/download_models.sh
+  ./src/gqcnn_dependencies/gqcnn/scripts/downloads/models/download_models.sh
   ```
 
 4) Configuration File Paths
 ## simply replace bostoncreek with your linux username, in the absolute paths
 
-In `moveit_task_constructor_gpd/config/dexnet_config.yaml` specify the absolute file paths to the `model_dir` and `model_params` parameters for the Dex-Net 4.0 parallel jaw configuration. The `model_name` is already set to use the Dex-Net 4.0 parallel jaw configuration. The `model_dir` parameter specifies the path to the learned model weights located in `gqcnn/cfg/examples/replication/dex-net_4.0_pj.yaml` and the `model_params` parameter specifies the model configuration located in `gqcnn/models`. If you use the `dexnet_install.sh` script the `gqcnn` directory will be located inside the `dexnet_deps` directory.
+In the file 'dexnet_config.yaml', change the absolute path from /home/jeoseo/ws_grasp... to /home/your_username/your_ws_name...
+This is because they decided to use an absolute path :/
 
-
-## Download ROS Packages
-### Setup New Workspace
-For now it is recommended to create a new workspace to prevent conflicts between packages. This will be especially helpful if you want to use Gazebo with the demos.
-```
-mkdir -p ~/ws_grasp/src
-cd ~/ws_grasp/src
-wstool init
-wstool merge https://raw.githubusercontent.com/jeoseo/deep_grasp_demo/master/.rosinstall
-wstool update
-
-rosdep install --from-paths . --ignore-src --rosdistro $ROS_DISTRO
-```
-
-Note: Here you will need to extend the `ws_grasp` to the `ws_moveit` that was created from the [Getting Started Tutorial](https://ros-planning.github.io/moveit_tutorials/doc/getting_started/getting_started.html).
-```
-cd ~/ws_grasp
-catkin config --extend <path_to_ws_moveit>/devel --cmake-args -DCMAKE_BUILD_TYPE=Release
-catkin build
-```
-
+### TODO, fix any tutorials below
 
 ### Panda Gazebo Support (Optional)
 You will need the C++ Franka Emika library. This can be installed from [source](https://github.com/frankaemika/libfranka) or by executing:
@@ -108,7 +99,7 @@ git clone https://github.com/tahsinkose/franka_ros.git -b simulation
 
 
 ## Launching Demos and Further Details
-To see how to launch the demos using GPD and Dex-Net see the [moveit_task_constructor_gpd](https://github.com/PickNikRobotics/deep_grasp_demo/tree/master/moveit_task_constructor_gpd) and [moveit_task_constructor_dexnet](https://github.com/PickNikRobotics/deep_grasp_demo/tree/master/moveit_task_constructor_dexnet) packages.
+To see how to launch the demos using GPD and Dex-Net see the [moveit_task_constructor_gpd](https://github.com/jeoseo/deep_grasp_demo/tree/master/moveit_task_constructor_gpd) and [moveit_task_constructor_dexnet](https://github.com/jeoseo/deep_grasp_demo/tree/master/moveit_task_constructor_dexnet) packages.
 
 
 ## Depth Sensor Data
