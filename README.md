@@ -63,6 +63,7 @@ catkin workspace. For GPD this includes PCL, OpenCV, and the GPD library. For De
   If you have a GPU this option will install tensorflow with GPU support. This script
   will install packages for Python 3.
   ```
+  cd tutorial-env
   wget https://raw.githubusercontent.com/jeoseo/deep_grasp_demo/master/dexnet_install.sh
   wget https://raw.githubusercontent.com/jeoseo/deep_grasp_demo/master/dexnet_requirements.txt
   chmod +x dexnet_install.sh
@@ -74,6 +75,7 @@ catkin workspace. For GPD this includes PCL, OpenCV, and the GPD library. For De
 3) Download the pretrained models
 
   ```
+  cd ..
   ./src/gqcnn_dependencies/gqcnn/scripts/downloads/models/download_models.sh
   ```
 
