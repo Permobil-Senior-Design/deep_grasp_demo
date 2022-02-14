@@ -25,6 +25,7 @@ for the grasp generation stage within the MoveIt Task Constructor
   ```
   cd ..
   mkdir gpd_installations
+  cd gpd_installations
   ```
   * PCL >= 1.9: The `pcl_install.sh` script will install PCL 1.11
   ```
