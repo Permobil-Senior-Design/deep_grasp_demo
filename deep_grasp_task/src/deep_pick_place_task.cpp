@@ -282,14 +282,14 @@ void DeepPickPlaceTask::init()
       grasp->insert(std::move(stage));
     }
 
-    /****************************************************
-  .... *               Forbid collision (object support)  *
-     ***************************************************/
-    {
-      auto stage = std::make_unique<stages::ModifyPlanningScene>("forbid collision (object,surface)");
-      stage->allowCollisions({ object }, support_surfaces_, false);
-      grasp->insert(std::move(stage));
-    }
+    /******************************************************
+  ---- *          Detach Object                             *
+		 *****************************************************/
+		{
+			auto stage = std::make_unique<stages::ModifyPlanningScene>("detach object");
+			stage->detachObject(object_name_, hand_frame_);
+			grasp->insert(std::move(stage));
+		}
 
     // Add grasp container to task
     t.add(std::move(grasp));
