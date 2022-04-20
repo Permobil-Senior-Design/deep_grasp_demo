@@ -86,6 +86,47 @@ moveit_msgs::CollisionObject createTable()
   return object;
 }
 
+std::vector<moveit_msgs::CollisionObject> createBox()
+{
+  ros::NodeHandle pnh("~");
+
+  int box_num;
+  std::string object_reference_frame;
+  std::size_t error = 0;
+  error += !rosparam_shortcuts::get(LOGNAME, pnh, "box_num", box_num);
+  error += !rosparam_shortcuts::get(LOGNAME, pnh, "object_reference_frame", object_reference_frame);
+  rosparam_shortcuts::shutdownIfError(LOGNAME, error);
+
+  std::string object_name;
+  std::vector<double> object_dimensions;
+  geometry_msgs::Pose pose;
+  
+  std::vector<moveit_msgs::CollisionObject> boxes;
+  for (int i=0; i< box_num; i++){
+    
+    error += !rosparam_shortcuts::get(LOGNAME, pnh, "box_name"+std::to_string(i), object_name);
+    error += !rosparam_shortcuts::get(LOGNAME, pnh, "box_dimensions"+std::to_string(i), object_dimensions);
+    error += !rosparam_shortcuts::get(LOGNAME, pnh, "box_pose"+std::to_string(i), pose);
+    rosparam_shortcuts::shutdownIfError(LOGNAME, error);
+    
+    moveit_msgs::CollisionObject object;
+
+    
+    object.id = object_name;
+    object.header.frame_id = object_reference_frame;
+    object.primitives.resize(1);
+    
+    object.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
+    object.primitives[0].dimensions = object_dimensions;
+    pose.position.z += 0.5 * object_dimensions[2];  // align surface with world
+    object.primitive_poses.push_back(pose);
+    
+    object.operation = moveit_msgs::CollisionObject::ADD;
+    boxes.push_back(object);
+  }
+  return boxes;
+}
+
 moveit_msgs::CollisionObject createObject()
 {
   ros::NodeHandle pnh("~");
@@ -103,40 +144,14 @@ moveit_msgs::CollisionObject createObject()
   object.id = object_name;
   object.header.frame_id = object_reference_frame;
   object.primitives.resize(1);
-  object.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
+  object.primitives[0].type = shape_msgs::SolidPrimitive::CYLINDER;
   object.primitives[0].dimensions = object_dimensions;
-  //pose.position.z += 0.5 * object_dimensions[2];
+  pose.position.z += 0.5 * object_dimensions[0];
   object.primitive_poses.push_back(pose);
   object.operation = moveit_msgs::CollisionObject::ADD;
 
   return object;
 }
-
-// moveit_msgs::CollisionObject createObject()
-// {
-//   ros::NodeHandle pnh("~");
-//   std::string object_name, object_reference_frame;
-//   std::vector<double> object_dimensions;
-//   geometry_msgs::Pose pose;
-//   std::size_t error = 0;
-//   error += !rosparam_shortcuts::get(LOGNAME, pnh, "object_name", object_name);
-//   error += !rosparam_shortcuts::get(LOGNAME, pnh, "object_reference_frame", object_reference_frame);
-//   error += !rosparam_shortcuts::get(LOGNAME, pnh, "object_dimensions", object_dimensions);
-//   error += !rosparam_shortcuts::get(LOGNAME, pnh, "object_pose", pose);
-//   rosparam_shortcuts::shutdownIfError(LOGNAME, error);
-
-//   moveit_msgs::CollisionObject object;
-//   object.id = object_name;
-//   object.header.frame_id = object_reference_frame;
-//   object.primitives.resize(1);
-//   object.primitives[0].type = shape_msgs::SolidPrimitive::CYLINDER;
-//   object.primitives[0].dimensions = object_dimensions;
-//   pose.position.z += 0.5 * object_dimensions[0];
-//   object.primitive_poses.push_back(pose);
-//   object.operation = moveit_msgs::CollisionObject::ADD;
-
-//   return object;
-// }
 
 moveit_msgs::CollisionObject createCamera()
 {
@@ -241,6 +256,14 @@ int main(int argc, char** argv)
   {
     spawnObject(psi, createObject());
   }
+
+  //Add additional obstacles, as boxes
+
+  
+  auto boxes = createBox();
+  
+  for (int i =0; i< boxes.size();i++)  spawnObject(psi, boxes[i]);
+  
 
   // Construct and run task
   deep_grasp_task::DeepPickPlaceTask deep_pick_place_task("deep_pick_place_task", nh);
