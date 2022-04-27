@@ -247,15 +247,15 @@ int main(int argc, char** argv)
     spawnObject(psi, createCamera());
   }
 
-  // Add object to planning scene either as mesh or geometric primitive
-  if (pnh.param("spawn_mesh", true))
-  {
-    spawnObject(psi, createObjectMesh());
-  }
-  else
-  {
-    spawnObject(psi, createObject());
-  }
+  // // Add object to planning scene either as mesh or geometric primitive
+  // if (pnh.param("spawn_mesh", true))
+  // {
+  //   spawnObject(psi, createObjectMesh());
+  // }
+  // else
+  // {
+  //   spawnObject(psi, createObject());
+  // }
 
   //Add additional obstacles, as boxes
 
