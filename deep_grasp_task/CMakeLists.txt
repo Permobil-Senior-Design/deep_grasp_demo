@@ -47,11 +47,18 @@ add_executable(deep_grasp_demo
  							 src/deep_grasp_demo.cpp
 							 src/deep_pick_place_task.cpp
 )
+add_executable(deep_grasp_init_scene
+ 							 src/deep_grasp_init_scene.cpp
+)
 
 # Specify libraries to link a library or executable target against
 target_link_libraries(deep_grasp_demo
                       ${catkin_LIBRARIES}
 )
+target_link_libraries(deep_grasp_init_scene
+                      ${catkin_LIBRARIES}
+)
+
 
 #############
 ## Install ##
@@ -61,6 +68,7 @@ target_link_libraries(deep_grasp_demo
 install(
   TARGETS
     deep_grasp_demo
+    deep_grasp_init_scene
   ARCHIVE DESTINATION
     ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION

@@ -184,16 +184,7 @@ void DeepPickPlaceTask::init()
     t.properties().exposeTo(grasp->properties(), { "eef", "hand", "group", "ik_frame" });
     grasp->properties().configureInitFrom(Stage::PARENT, { "eef", "hand", "group", "ik_frame" });
 
-     /****************************************************
-  ---- *               Allow Collision (hand object)   *
-     ***************************************************/
-    {
-      auto stage = std::make_unique<stages::ModifyPlanningScene>("allow collision (hand,object)");
-      stage->allowCollisions(
-          object, t.getRobotModel()->getJointModelGroup(hand_group_name_)->getLinkModelNamesWithCollisionGeometry(),
-          true);
-      grasp->insert(std::move(stage));
-    }
+
 
     /****************************************************
   ---- *               Approach Object                    *
@@ -212,7 +203,6 @@ void DeepPickPlaceTask::init()
       stage->setDirection(vec);
       grasp->insert(std::move(stage));
     }
-
 
     /****************************************************
   ---- *               Generate Grasp Pose                *
@@ -236,8 +226,6 @@ void DeepPickPlaceTask::init()
       grasp->insert(std::move(wrapper));
     }
 
-    
-
     /****************************************************
   ---- *               Close Hand                      *
      ***************************************************/
@@ -248,24 +236,15 @@ void DeepPickPlaceTask::init()
       grasp->insert(std::move(stage));
     }
 
-  //   /****************************************************
-  // .... *               Attach Object                      *
-  //    ***************************************************/
-  //   {
-  //     auto stage = std::make_unique<stages::ModifyPlanningScene>("attach object");
-  //     stage->attachObject(object, hand_frame_);
-  //     attach_object_stage = stage.get();
-  //     grasp->insert(std::move(stage));
-  //   }
-
-    /****************************************************
-  .... *               Allow collision (object support)   *
-     ***************************************************/
-    {
-      auto stage = std::make_unique<stages::ModifyPlanningScene>("allow collision (object,support)");
-      stage->allowCollisions({ object }, support_surfaces_, true);
-      grasp->insert(std::move(stage));
-    }
+    //   /****************************************************
+    // .... *               Attach Object                      *
+    //    ***************************************************/
+    //   {
+    //     auto stage = std::make_unique<stages::ModifyPlanningScene>("attach object");
+    //     stage->attachObject(object, hand_frame_);
+    //     attach_object_stage = stage.get();
+    //     grasp->insert(std::move(stage));
+    //   }
 
     /****************************************************
   .... *               Lift object                        *
@@ -285,19 +264,18 @@ void DeepPickPlaceTask::init()
       grasp->insert(std::move(stage));
     }
 
-  //   /******************************************************
-  // ---- *          Detach Object                             *
-	// 	 *****************************************************/
-	// 	{
-	// 		auto stage = std::make_unique<stages::ModifyPlanningScene>("detach object");
-	// 		stage->detachObject(object_name_, hand_frame_);
-	// 		grasp->insert(std::move(stage));
-	// 	}
+    //   /******************************************************
+    // ---- *          Detach Object                             *
+    // 	 *****************************************************/
+    // 	{
+    // 		auto stage = std::make_unique<stages::ModifyPlanningScene>("detach object");
+    // 		stage->detachObject(object_name_, hand_frame_);
+    // 		grasp->insert(std::move(stage));
+    // 	}
 
     // Add grasp container to task
     t.add(std::move(grasp));
   }
-
 }
 
 bool DeepPickPlaceTask::plan()
